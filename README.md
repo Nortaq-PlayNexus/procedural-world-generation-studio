@@ -15,6 +15,9 @@ Deterministic procedural world-generation studio with geological simulation, hyd
 
 ## Screenshots
 
+![3D Viewport](docs/screenshots/ui-3d-view.png)
+
+
 | Preview (seed 577) | Biome map (seed 577) |
 |---|---|
 | ![preview](docs/screenshots/seed-577-preview.png) | ![biome](docs/screenshots/seed-577-biome.png) |
@@ -54,3 +57,4 @@ Expected: `18/18 passed`.
 ## License
 
 MIT
+
