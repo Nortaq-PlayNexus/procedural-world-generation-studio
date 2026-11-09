@@ -1,0 +1,30 @@
+import { chromium } from 'playwright';
+import fs from 'node:fs';
+const browser = await chromium.launch({ args: ['--use-angle=swiftshader','--enable-unsafe-swiftshader'] });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const errors = [];
+page.on('pageerror', e => errors.push('PAGEERROR ' + e.message));
+page.on('console', m => { if (m.type() === 'error') errors.push('CONSOLE ' + m.text().slice(0, 400)); });
+const client = await page.context().newCDPSession(page);
+const shot = async (name) => { const { data } = await client.send('Page.captureScreenshot', { format: 'jpeg', quality: 88 }); fs.writeFileSync(name, Buffer.from(data, 'base64')); return name; };
+await page.goto('http://localhost:4173', { waitUntil: 'load' });
+await page.waitForTimeout(12000);
+await page.locator('select[aria-label="Render quality"]').selectOption('high');
+await page.waitForTimeout(3000);
+await shot('reports/visual/v2-temperate-noon.jpg');
+const env = page.locator('select[aria-label="Environment preset"]');
+const sun = page.locator('select[aria-label="Lighting preset"]');
+const report = { presets: [] };
+for (const [id, sunId] of [['tropical','noon'],['arctic','dawn'],['volcanic','dusk'],['desert','noon'],['deepocean','dusk']]) {
+  await env.selectOption(id); await sun.selectOption(sunId);
+  await page.waitForTimeout(1800);
+  report.presets.push(await shot(`reports/visual/v2-${id}.jpg`));
+}
+await env.selectOption('temperate');
+await page.locator('select[aria-label="Camera mode"]').selectOption('first');
+await page.waitForTimeout(3000);
+await shot('reports/visual/v2-ground.jpg');
+report.footer = (await page.locator('footer').innerText()).slice(0, 300);
+console.log(JSON.stringify(report, null, 1));
+console.log('ERRORS:', errors.length ? errors.join('\n') : 'none');
+await browser.close();

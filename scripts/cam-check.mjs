@@ -1,0 +1,15 @@
+import { chromium } from 'playwright';
+import fs from 'node:fs';
+const b = await chromium.launch({ args: ['--use-angle=swiftshader','--enable-unsafe-swiftshader'] });
+const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+const cons = []; p.on('console', m => { if (m.type() === 'error') cons.push(m.text().slice(0,150)); });
+await p.goto('http://localhost:4173', { waitUntil: 'load' }); await p.waitForTimeout(11000);
+await p.locator('select[aria-label="Render quality"]').selectOption('low');
+await p.locator('select[aria-label="Camera mode"]').selectOption('first');
+await p.waitForTimeout(4500);
+const c = await p.context().newCDPSession(p);
+const { data } = await c.send('Page.captureScreenshot', { format: 'jpeg', quality: 86 });
+fs.writeFileSync('reports/visual/ui-camera-first.jpg', Buffer.from(data, 'base64'));
+console.log(JSON.stringify({ pageErrors: errs, consoleErrors: cons }));
+await b.close();

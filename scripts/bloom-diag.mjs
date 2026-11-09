@@ -1,0 +1,20 @@
+import { chromium } from 'playwright';
+import fs from 'node:fs';
+const b = await chromium.launch({ args: ['--use-angle=swiftshader','--enable-unsafe-swiftshader'] });
+const p = await b.newPage({ viewport: { width: 1200, height: 800 } });
+await p.goto('http://localhost:4173', { waitUntil: 'load' });
+await p.waitForTimeout(12000);
+await p.locator('select[aria-label="Render quality"]').selectOption('low');
+await p.waitForTimeout(1500);
+const c = await p.context().newCDPSession(p);
+const shot = async (n) => { const { data } = await c.send('Page.captureScreenshot', { format: 'jpeg', quality: 82 }); fs.writeFileSync(`reports/visual/bloom-${n}.jpg`, Buffer.from(data, 'base64')); };
+await shot('low-no-post');
+await p.locator('select[aria-label="Render quality"]').selectOption('high');
+await p.waitForTimeout(2200);
+await shot('high-post');
+// switch to topographic (no WebGL) to see if band is WebGL-only
+await p.getByText('Topographic', { exact: true }).click();
+await p.waitForTimeout(1500);
+await shot('map-view');
+console.log('done');
+await b.close();

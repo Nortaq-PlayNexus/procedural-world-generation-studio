@@ -1,0 +1,230 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --bg: #070b0e;
+  --bg-deep: #05080a;
+  --panel: #0b1216;
+  --panel-2: #0e171c;
+  --panel-3: #121d23;
+  --line: rgba(151, 189, 183, 0.11);
+  --line-strong: rgba(151, 189, 183, 0.19);
+  --text: #e4eeea;
+  --muted: #839691;
+  --faint: #566863;
+  --accent: #5fe3c0;
+  --accent-soft: rgba(95, 227, 192, 0.14);
+  --accent-line: rgba(95, 227, 192, 0.35);
+  --cyan: #64c8ff;
+  --amber: #e9b872;
+  --danger: #f27c6a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  letter-spacing: -0.01em;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #26383a transparent;
+}
+.panel-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.panel-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: #25373a;
+  border-radius: 8px;
+}
+.panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: #344d4f;
+}
+
+.studio-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+}
+.studio-range::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #4ac7aa 0%, #4ac7aa var(--pct), #253336 var(--pct), #253336 100%);
+}
+.studio-range::-moz-range-track {
+  height: 3px;
+  border-radius: 4px;
+  background: #253336;
+}
+.studio-range::-moz-range-progress {
+  height: 3px;
+  background: #4ac7aa;
+}
+.studio-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: #dffbf3;
+  border: 2px solid #0a1013;
+  box-shadow: 0 0 0 1px rgba(95, 227, 192, 0.75), 0 0 10px rgba(95, 227, 192, 0.2);
+  transition: transform 120ms ease;
+}
+.studio-range:hover::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.studio-range::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border: 2px solid #0a1013;
+  border-radius: 50%;
+  background: #dffbf3;
+  box-shadow: 0 0 0 1px rgba(95, 227, 192, 0.75);
+}
+.studio-range:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+textarea,
+input,
+select {
+  outline: none;
+}
+textarea:focus,
+input:focus,
+select:focus {
+  border-color: var(--accent-line) !important;
+}
+
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-feature-settings: "tnum" 1;
+}
+
+.grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+.hairline {
+  border-color: var(--line);
+}
+
+.glass {
+  background: rgba(10, 17, 21, 0.82);
+  backdrop-filter: blur(16px) saturate(115%);
+  border: 1px solid rgba(166, 201, 194, 0.12);
+}
+
+.viewport-vignette {
+  background: radial-gradient(ellipse at 50% 46%, transparent 32%, rgba(3, 7, 9, 0.42) 86%, rgba(3, 7, 9, 0.78) 100%);
+}
+
+.scanline {
+  background: repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(0, 0, 0, 0.055) 3px, rgba(0, 0, 0, 0.055) 4px);
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(95, 227, 192, 0.35); }
+  70% { box-shadow: 0 0 0 8px rgba(95, 227, 192, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(95, 227, 192, 0); }
+}
+.live-dot {
+  animation: pulse-ring 2.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(95, 227, 192, 0.28), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fadeInUp 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in {
+  animation: fadeIn 180ms ease both;
+}
+
+@keyframes brushPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.tooltip-wrap .tooltip {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease 200ms;
+}
+.tooltip-wrap:hover .tooltip {
+  opacity: 1;
+}
+
+.no-native-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237d918f' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.checker {
+  background-image: linear-gradient(45deg, #0b1418 25%, transparent 25%), linear-gradient(-45deg, #0b1418 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #0b1418 75%), linear-gradient(-45deg, transparent 75%, #0b1418 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  background-color: #0e1a1f;
+}
+
+/* Railed panels are hidden by their layout wrappers, not themselves, so the
+   same components can be mounted inside responsive drawers. */
+
